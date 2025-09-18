@@ -28,6 +28,7 @@ function getNumericValue(inputEl) {
 }
 
 function formatCurrency(value) {
+    // return "$" + Number(value || 0).toLocaleString("en-US");
     return "$" + Number(value || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 }
@@ -256,3 +257,40 @@ document.getElementById("saveBtn").addEventListener("click", () => {
 document.getElementById("clearBtn").addEventListener("click", () => {
     clearForm();
 });
+
+const priceInput = document.getElementById("price");
+const downInput = document.getElementById("down");
+const downPercentInput = document.getElementById("downPercent");
+
+function getNumericValue(el) {
+    return parseFloat(el.value.replace(/,/g, '')) || 0;
+}
+
+function updateDownPercent() {
+    const price = getNumericValue(priceInput);
+    const down = getNumericValue(downInput);
+    downPercentInput.value = price === 0 ? '100' : ((down / price) * 100).toFixed(5);
+}
+
+function updateDownValue() {
+    const price = getNumericValue(priceInput);
+    const downPercent = getNumericValue(downPercentInput);
+    downInput.value = price === 0 ? '' : formatWithCommas((downPercent * price / 100).toFixed(2));
+}
+
+function onPriceChange() {
+    const price = getNumericValue(priceInput);
+    const downPercent = getNumericValue(downPercentInput);
+    const down = getNumericValue(downInput);
+
+    if(downPercent !== 0) {
+        updateDownValue();
+    } else if(down !== 0) {
+        updateDownPercent();
+    }
+}
+
+// Event listeners
+downInput.addEventListener("keyup", updateDownPercent);
+downPercentInput.addEventListener("keyup", updateDownValue);
+priceInput.addEventListener("keyup", onPriceChange);
