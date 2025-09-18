@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mortgage Scenario Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h2>Mortgage Calculator</h2>
+
+  <label>
+    Label
+    <input type="text" id="label" placeholder="Label">
+  </label>
+
+  <label>
+    Price:
+    <input type="text" id="price" placeholder="e.g. 350,000" class="comma-input">
+  </label>
+
+  <label>
+    Down Payment:
+    <input type="text" id="down" placeholder="e.g. 50,000" class="comma-input">
+  </label>
+
+  <label>
+    Interest Rate (%):
+    <input type="text" id="rate" placeholder="e.g. 6.5">
+  </label>
+
+  <label>
+    Term (years):
+    <input type="text" id="term" placeholder="e.g. 30" class="comma-input">
+  </label>
+
+  <label>
+    Monthly Property Taxes:
+    <input type="text" id="taxes" placeholder="e.g. 250" class="comma-input">
+  </label>
+
+  <label>
+    Monthly PMI:
+    <input type="text" id="pmi" placeholder="e.g. 100" class="comma-input">
+  </label>
+
+  <label>
+    Monthly Home Insurance:
+    <input type="text" id="insurance" placeholder="e.g. 120" class="comma-input">
+  </label>
+
+  <button id="calculateBtn">Calculate & Save Scenario</button>
+
+  <div id="result">Monthly Payment: $0</div>
+
+  <h3>Saved Scenarios</h3>
+  <table id="scenarioTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Label</th>
+        <th>Price</th>
+        <th>Down</th>
+        <th>Rate %</th>
+        <th>Term</th>
+        <th>Taxes</th>
+        <th>PMI</th>
+        <th>Insurance</th>
+        <th>Monthly</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="index.js"></script>
+</body>
+
+</html>
