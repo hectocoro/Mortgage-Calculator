@@ -33,6 +33,25 @@ function formatCurrency(value) {
 
 }
 
+// format a percentage value but trim unnecessary trailing zeros
+function formatPercent(value) {
+    if (!isFinite(value)) return "";
+    const v = Number(value);
+    const fixed = v.toFixed(2);
+    // trim trailing .00 or a trailing zero after a single decimal
+    return fixed.replace(/\.00$/, '').replace(/(\.\d)0$/, '$1');
+}
+
+// return down payment as currency and percentage of price, e.g. "$50,000.00 (10%)"
+function formatDownDisplay(price, down) {
+    const downNum = Number(down || 0);
+    const priceNum = Number(price || 0);
+    const currency = formatCurrency(downNum);
+    if (!priceNum || !isFinite(priceNum)) return currency;
+    const pct = (downNum / priceNum) * 100;
+    return `${currency} (${formatPercent(pct)}%)`;
+}
+
 function calculatePayment({ price, down, rate, term, taxes, pmi, insurance }) {
     const principal = price - down;
     const monthlyRate = rate / 100 / 12;
@@ -113,8 +132,8 @@ function renderScenarios() {
         row.innerHTML = `
         <td>${i + 1}</td>
         <td>${s.label}</td>
-        <td>${formatCurrency(s.price)}</td>
-        <td>${formatCurrency(s.down)}</td>
+    <td>${formatCurrency(s.price)}</td>
+    <td>${formatDownDisplay(s.price, s.down)}</td>
         <td>${s.rate}%</td>
         <td>${s.term} yrs</td>
         <td>${formatCurrency(s.taxes)}</td>
