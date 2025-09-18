@@ -45,7 +45,8 @@ function calculatePayment({ price, down, rate, term, taxes, pmi, insurance }) {
 // -----------------------------
 // Core Functions
 // -----------------------------
-function saveScenario() {
+// Calculate scenario from current form values and update result display.
+function calculateScenario() {
     const scenario = {
         label: document.getElementById('label').value,
         price: getNumericValue(document.getElementById('price')),
@@ -58,8 +59,14 @@ function saveScenario() {
     };
     scenario.monthly = calculatePayment(scenario);
 
-    // Display result
+    // Display result (do not save)
     document.getElementById('result').textContent = "Monthly Payment: " + formatCurrency(scenario.monthly);
+
+    return scenario;
+}
+
+function saveScenario() {
+    const scenario = calculateScenario();
 
     // Save scenario
     let scenarios = JSON.parse(localStorage.getItem("scenarios")) || [];
@@ -67,6 +74,24 @@ function saveScenario() {
     localStorage.setItem("scenarios", JSON.stringify(scenarios));
 
     renderScenarios();
+}
+
+function clearForm() {
+    // Clear inputs
+    document.getElementById('label').value = '';
+    document.getElementById('price').value = '';
+    document.getElementById('down').value = '';
+    document.getElementById('rate').value = '';
+    document.getElementById('term').value = '';
+    document.getElementById('taxes').value = '';
+    document.getElementById('pmi').value = '';
+    document.getElementById('insurance').value = '';
+
+    // Reset result
+    document.getElementById('result').textContent = "Monthly Payment: $0";
+
+    // move focus to first field
+    document.getElementById('label').focus();
 }
 
 function renderScenarios() {
@@ -219,4 +244,15 @@ window.addEventListener("load", () => {
     });
 });
 
-document.getElementById("calculateBtn").addEventListener("click", saveScenario);
+// Button wiring: Calculate updates the monthly display only. Save persists the current inputs as a scenario.
+document.getElementById("calculateBtn").addEventListener("click", () => {
+    calculateScenario();
+});
+
+document.getElementById("saveBtn").addEventListener("click", () => {
+    saveScenario();
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+    clearForm();
+});
