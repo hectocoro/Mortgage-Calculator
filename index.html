@@ -10,47 +10,60 @@
 <body>
   <h2>Mortgage Calculator</h2>
 
+  <div style="width: 50%;">
   <label>
     Label
-    <input type="text" id="label" placeholder="Label">
+    <input type="text" id="label" placeholder="Short Description">
   </label>
 
   <label>
     Price:
-    <input type="text" id="price" placeholder="e.g. 350,000" class="comma-input">
+    <div class="dollar" style="position: relative;">
+      <input type="text" id="price" placeholder="350,000" class="comma-input">
+    </div>
   </label>
 
   <label>
     Down Payment:
     <div style="display: flex; width: 100%;">
-      <input type="text" id="down" placeholder="e.g. 50,000" class="comma-input" style="flex: 7;">
-      <input type="number" id="downPercent" placeholder="e.g. 20"  style="flex: 3;">
+      <div class="dollar" style="flex: 7; position: relative;">
+        <input type="text" id="down" placeholder="50,000" class="comma-input">
+      </div>
+      <div class="percent" style="flex: 3; position: relative;">
+        <input type="number" id="downPercent" placeholder="20" style="padding-right: 20px;">
+      </div>
     </div>
   </label>
 
   <label>
     Interest Rate (%):
-    <input type="text" id="rate" placeholder="e.g. 6.5">
+    <input type="text" id="rate" placeholder="6.5">
   </label>
 
   <label>
     Term (years):
-    <input type="text" id="term" placeholder="e.g. 30" class="comma-input">
+    <input type="text" id="term" placeholder="30" class="comma-input">
   </label>
 
   <label>
     Monthly Property Taxes:
-    <input type="text" id="taxes" placeholder="e.g. 250" class="comma-input">
+    <div class="dollar" style="position: relative;">
+      <input type="text" id="taxes" placeholder="250" class="comma-input">
+    </div>
   </label>
 
   <label>
     Monthly PMI:
-    <input type="text" id="pmi" placeholder="e.g. 100" class="comma-input">
+    <div class="dollar" style="position: relative;">
+      <input type="text" id="pmi" placeholder="100" class="comma-input">
+    </div>
   </label>
 
   <label>
     Monthly Home Insurance:
-    <input type="text" id="insurance" placeholder="e.g. 120" class="comma-input">
+    <div class="dollar" style="position: relative;">
+      <input type="text" id="insurance" placeholder="120" class="comma-input">
+    </div>
   </label>
 
   <div class="button-row">
@@ -60,6 +73,7 @@
   </div>
 
   <div id="result">Monthly Payment: $0</div>
+  </div>
 
   <h3>Saved Scenarios</h3>
   <table id="scenarioTable">

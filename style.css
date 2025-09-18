@@ -6,42 +6,52 @@ body {
   border: 1px solid #ddd;
   border-radius: 8px;
 }
+
 label {
   display: block;
   margin-top: 10px;
 }
+
 input {
   width: 100%;
   padding: 6px;
   margin-top: 4px;
   box-sizing: border-box;
 }
+
 input[type='number'] {
-  -moz-appearance:textfield;
+  -moz-appearance: textfield;
 }
+
 button {
   margin-top: 15px;
   padding: 10px;
   cursor: pointer;
 }
+
 #result {
   margin-top: 15px;
   font-size: 1.2em;
   font-weight: bold;
 }
+
 table {
   margin-top: 20px;
   width: 100%;
   border-collapse: collapse;
 }
-th, td {
+
+th,
+td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
 }
+
 th {
   background: #f0f0f0;
 }
+
 .delete-btn {
   color: white;
   background: red;
@@ -49,4 +59,29 @@ th {
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 4px;
+  margin-top: none;
+}
+
+.dollar::before {
+  position: absolute;
+  content: "$";
+  left: 10px;
+  top: 60%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 14px;
+}
+
+.dollar input {
+  padding-left: 20px;
+}
+
+.percent::after {
+  content: "%";
+  position: absolute;
+  right: 5px;
+  top: 60%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 14px;
 }
