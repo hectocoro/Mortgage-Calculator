@@ -95,11 +95,105 @@ function renderScenarios() {
         const delBtn = document.createElement("button");
         delBtn.textContent = "X";
         delBtn.className = "delete-btn";
-        delBtn.addEventListener("click", () => deleteScenario(i));
+        delBtn.addEventListener("click", (ev) => {
+            // prevent the row click from also firing
+            ev.stopPropagation();
+            deleteScenario(i);
+        });
         row.querySelector("td:last-child").appendChild(delBtn);
+
+        // Row click: populate form with this scenario. If user clicks the # column (index 0) populate the whole form;
+        // otherwise only populate the single clicked field.
+        row.addEventListener('click', (ev) => {
+            const td = ev.target.closest('td');
+            if (!td) return;
+            const cellIndex = Array.from(row.querySelectorAll('td')).indexOf(td);
+            // Map table column index -> input id
+            // columns: 0:#, 1:Label, 2:Price, 3:Down, 4:Rate %, 5:Term, 6:Taxes, 7:PMI, 8:Insurance, 9:Monthly, 10:Action
+            const colToField = {
+                1: 'label',
+                2: 'price',
+                3: 'down',
+                4: 'rate',
+                5: 'term',
+                6: 'taxes',
+                7: 'pmi',
+                8: 'insurance'
+            };
+
+            if (cellIndex === 0) {
+                // load entire scenario into the form
+                populateFormFromScenario(s, null);
+                return;
+            }
+
+            const field = colToField[cellIndex] || null;
+            if (field) {
+                populateSingleFieldFromScenario(s, field);
+            }
+        });
 
         tbody.appendChild(row);
     });
+}
+
+// Populate the form inputs from a scenario object. If focusField is provided, focus that input.
+function populateFormFromScenario(scenario, focusField = null) {
+    if (!scenario) return;
+
+    // text fields
+    document.getElementById('label').value = scenario.label || '';
+
+    // numeric fields - format with commas where appropriate
+    document.getElementById('price').value = formatWithCommas(String(scenario.price || ''));
+    document.getElementById('down').value = formatWithCommas(String(scenario.down || ''));
+    document.getElementById('rate').value = scenario.rate != null ? String(scenario.rate) : '';
+    document.getElementById('term').value = formatWithCommas(String(scenario.term || ''));
+    document.getElementById('taxes').value = formatWithCommas(String(scenario.taxes || ''));
+    document.getElementById('pmi').value = formatWithCommas(String(scenario.pmi || ''));
+    document.getElementById('insurance').value = formatWithCommas(String(scenario.insurance || ''));
+
+    // update calculated result display
+    document.getElementById('result').textContent = "Monthly Payment: " + formatCurrency(scenario.monthly);
+
+    // focus requested field and place cursor at end
+    if (focusField) {
+        const el = document.getElementById(focusField);
+        if (el) {
+            el.focus();
+            // move caret to end
+            const val = el.value;
+            el.setSelectionRange && el.setSelectionRange(val.length, val.length);
+        }
+    }
+}
+
+// Populate only one field from a scenario and focus it.
+function populateSingleFieldFromScenario(scenario, field) {
+    if (!scenario || !field) return;
+
+    const valMap = {
+        label: scenario.label || '',
+        price: formatWithCommas(String(scenario.price || '')),
+        down: formatWithCommas(String(scenario.down || '')),
+        rate: scenario.rate != null ? String(scenario.rate) : '',
+        term: formatWithCommas(String(scenario.term || '')),
+        taxes: formatWithCommas(String(scenario.taxes || '')),
+        pmi: formatWithCommas(String(scenario.pmi || '')),
+        insurance: formatWithCommas(String(scenario.insurance || '')),
+        monthly: formatCurrency(scenario.monthly)
+    };
+
+    const el = document.getElementById(field);
+    if (el && valMap.hasOwnProperty(field)) {
+        el.value = valMap[field];
+        el.focus();
+        const val = el.value;
+        el.setSelectionRange && el.setSelectionRange(val.length, val.length);
+    }
+
+    // Update monthly display in case monthly was clicked or to keep UI consistent
+    document.getElementById('result').textContent = "Monthly Payment: " + formatCurrency(scenario.monthly);
 }
 
 function deleteScenario(index) {
