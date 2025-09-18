@@ -52,6 +52,11 @@ th {
   background: #f0f0f0;
 }
 
+.sort-indicator {
+  font-size: 0.8em;
+  color: #333;
+}
+
 .delete-btn {
   color: white;
   background: red;

@@ -99,7 +99,13 @@ function clearForm() {
 function renderScenarios() {
     const tbody = document.querySelector("#scenarioTable tbody");
     tbody.innerHTML = "";
-    const scenarios = JSON.parse(localStorage.getItem("scenarios")) || [];
+    let scenarios = JSON.parse(localStorage.getItem("scenarios")) || [];
+
+    // Apply sorting if set
+    const sortState = window.__scenarioSortState || { col: null, dir: 1 };
+    if (sortState.col) {
+        scenarios = scenarios.slice().sort((a, b) => compareScenarios(a, b, sortState.col, sortState.dir));
+    }
 
     scenarios.forEach((s, i) => {
         const row = document.createElement("tr");
@@ -161,6 +167,71 @@ function renderScenarios() {
         });
 
         tbody.appendChild(row);
+    });
+}
+
+// compare two scenarios by column. dir = 1 for asc, -1 for desc
+function compareScenarios(a, b, col, dir = 1) {
+    const getVal = (obj, key) => {
+        if (key === 'label') return (obj.label || '').toString().toLowerCase();
+        if (key === 'monthly') return Number(obj.monthly || 0);
+        if (key === 'rate') return Number(obj.rate || 0);
+        if (key === 'term') return Number(obj.term || 0);
+        // numeric fields
+        return Number(obj[key] || 0);
+    };
+
+    const va = getVal(a, col);
+    const vb = getVal(b, col);
+
+    if (typeof va === 'string' && typeof vb === 'string') {
+        return dir * va.localeCompare(vb);
+    }
+    return dir * (va - vb);
+}
+
+// set up header click handlers for sorting (idempotent)
+function ensureSortableHeaders() {
+    if (window.__sortableHeadersInitialized) return;
+    window.__sortableHeadersInitialized = true;
+
+    const headers = document.querySelectorAll('#scenarioTable thead th[data-col]');
+    headers.forEach(th => {
+        const col = th.getAttribute('data-col');
+        // add visual indicator span
+        const indicator = document.createElement('span');
+        indicator.className = 'sort-indicator';
+        indicator.style.marginLeft = '6px';
+        th.appendChild(indicator);
+
+        th.addEventListener('click', () => {
+            const current = window.__scenarioSortState || { col: null, dir: 1 };
+            if (current.col === col) {
+                current.dir = -current.dir; // toggle
+            } else {
+                current.col = col;
+                current.dir = 1; // default asc
+            }
+            window.__scenarioSortState = current;
+            updateHeaderIndicators();
+            renderScenarios();
+        });
+    });
+
+    updateHeaderIndicators();
+}
+
+function updateHeaderIndicators() {
+    const state = window.__scenarioSortState || { col: null, dir: 1 };
+    document.querySelectorAll('#scenarioTable thead th[data-col]').forEach(th => {
+        const col = th.getAttribute('data-col');
+        const ind = th.querySelector('.sort-indicator');
+        if (!ind) return;
+        if (state.col === col) {
+            ind.textContent = state.dir === 1 ? '▲' : '▼';
+        } else {
+            ind.textContent = '';
+        }
     });
 }
 
@@ -236,6 +307,7 @@ function deleteScenario(index) {
 window.addEventListener("load", () => {
     document.getElementById("saveBtn").disabled = true;
     // render saved scenarios
+    ensureSortableHeaders();
     renderScenarios();
 
     // attach comma formatters to inputs
@@ -298,3 +370,6 @@ function onPriceChange() {
 downInput.addEventListener("keyup", updateDownPercent);
 downPercentInput.addEventListener("keyup", updateDownValue);
 priceInput.addEventListener("keyup", onPriceChange);
+
+// Initialize sortable headers in case script is loaded after DOM
+ensureSortableHeaders();
