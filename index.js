@@ -62,7 +62,7 @@ function calculateScenario() {
 
     // Display result (do not save)
     document.getElementById('result').textContent = "Monthly Payment: " + formatCurrency(scenario.monthly);
-
+    document.getElementById("saveBtn").disabled = false;
     return scenario;
 }
 
@@ -78,6 +78,7 @@ function saveScenario() {
 }
 
 function clearForm() {
+    document.getElementById("saveBtn").disabled = true;
     // Clear inputs
     document.getElementById('label').value = '';
     document.getElementById('price').value = '';
@@ -180,7 +181,7 @@ function populateFormFromScenario(scenario, focusField = null) {
     document.getElementById('insurance').value = formatWithCommas(String(scenario.insurance || ''));
 
     // update calculated result display
-    document.getElementById('result').textContent = "Monthly Payment: " + formatCurrency(scenario.monthly);
+    // document.getElementById('result').textContent = "Monthly Payment: " + formatCurrency(scenario.monthly);
 
     // focus requested field and place cursor at end
     if (focusField) {
@@ -233,6 +234,7 @@ function deleteScenario(index) {
 // Event Listeners
 // -----------------------------
 window.addEventListener("load", () => {
+    document.getElementById("saveBtn").disabled = true;
     // render saved scenarios
     renderScenarios();
 
@@ -241,6 +243,8 @@ window.addEventListener("load", () => {
         el.value = formatWithCommas(el.value);
         el.addEventListener("input", () => {
             el.value = formatWithCommas(el.value);
+            document.getElementById('result').textContent = "Monthly Payment: $0";
+            document.getElementById("saveBtn").disabled = true;
         });
     });
 });
