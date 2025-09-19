@@ -71,6 +71,22 @@ input {
   border-color: #0064b0;
 }
 
+/* Make term buttons span the form and each take ~50% width */
+.term-options {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.term-options .term-button {
+  flex: 1 1 50%; /* grow equally, base 50% */
+  min-width: 0;   /* allow shrinking in tight spaces */
+  padding: 12px 10px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
 input[type='number'] {
   -moz-appearance: textfield;
   -webkit-appearance: textfield;
