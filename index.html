@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mortgage Scenario Calculator</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -10,90 +11,97 @@
 <body>
   <h2>Mortgage Calculator</h2>
 
-  <div id="form" style="width: 50%;">
-  <label>
-    Label
-    <input type="text" id="label" placeholder="Short Description">
-  </label>
+  <div class="main-grid">
+    <div id="form">
+      <label>
+        Label
+        <input type="text" id="label" placeholder="Short Description">
+      </label>
 
-  <label>
-    Price:
-    <div class="dollar" style="position: relative;">
-      <input type="text" id="price" placeholder="350,000" class="comma-input" inputmode="decimal">
-    </div>
-  </label>
+      <label>
+        Price:
+        <div class="dollar" style="position: relative;">
+          <input type="text" id="price" placeholder="350,000" class="comma-input" inputmode="decimal">
+        </div>
+      </label>
 
-  <label>
-    Down Payment:
-    <div style="display: flex; width: 100%;">
-      <div class="dollar" style="flex: 7; position: relative;">
-        <input type="text" id="down" placeholder="50,000" class="comma-input" inputmode="decimal">
+      <label>
+        Down Payment:
+        <div style="display: flex; width: 100%;">
+          <div class="dollar" style="flex: 7; position: relative;">
+            <input type="text" id="down" placeholder="50,000" class="comma-input" inputmode="decimal">
+          </div>
+          <div class="percent" style="flex: 3; position: relative;">
+            <input type="number" id="downPercent" placeholder="20" style="padding-right: 20px;" inputmode="decimal">
+          </div>
+        </div>
+      </label>
+
+      <label>
+        Interest Rate (%):
+        <div class="percent" style="flex: 3; position: relative;">
+          <input type="text" id="rate" placeholder="6.5" inputmode="decimal">
+        </div>
+      </label>
+
+      <label>
+        Term (years):
+        <input type="text" id="term" placeholder="30" class="comma-input" inputmode="decimal">
+      </label>
+
+      <label>
+        Monthly Property Taxes:
+        <div class="dollar" style="position: relative;">
+          <input type="text" id="taxes" placeholder="250" class="comma-input" inputmode="decimal">
+        </div>
+      </label>
+
+      <label>
+        Monthly PMI:
+        <div class="dollar" style="position: relative;">
+          <input type="text" id="pmi" placeholder="100" class="comma-input" inputmode="decimal">
+        </div>
+      </label>
+
+      <label>
+        Monthly Home Insurance:
+        <div class="dollar" style="position: relative;">
+          <input type="text" id="insurance" placeholder="120" class="comma-input" inputmode="decimal">
+        </div>
+      </label>
+
+      <div class="button-row">
+        <button id="calculateBtn">Calculate</button>
+        <button id="saveBtn">Save Scenario</button>
+        <button id="clearBtn">Clear</button>
       </div>
-      <div class="percent" style="flex: 3; position: relative;">
-        <input type="number" id="downPercent" placeholder="20" style="padding-right: 20px;" inputmode="decimal">
-      </div>
+
+      <div id="result">Monthly Payment: $0</div>
     </div>
-  </label>
 
-  <label>
-    Interest Rate (%):
-    <input type="text" id="rate" placeholder="6.5" inputmode="decimal">
-  </label>
-
-  <label>
-    Term (years):
-    <input type="text" id="term" placeholder="30" class="comma-input" inputmode="decimal">
-  </label>
-
-  <label>
-    Monthly Property Taxes:
-    <div class="dollar" style="position: relative;">
-      <input type="text" id="taxes" placeholder="250" class="comma-input" inputmode="decimal">
+    <div class="scenarios">
+      <h3>Saved Scenarios</h3>
+      <table id="scenarioTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th data-col="label" style="cursor: pointer; user-select: none;">Label</th>
+            <th data-col="price" style="cursor: pointer; user-select: none;">Price</th>
+            <th data-col="down" style="cursor: pointer; user-select: none;">Down</th>
+            <th data-col="rate" style="cursor: pointer; user-select: none;">Rate %</th>
+            <th data-col="term" style="cursor: pointer; user-select: none;">Term</th>
+            <th data-col="taxes" style="cursor: pointer; user-select: none;">Taxes</th>
+            <th data-col="pmi" style="cursor: pointer; user-select: none;">PMI</th>
+            <th data-col="insurance" style="cursor: pointer; user-select: none;">Insurance</th>
+            <th data-col="monthly" style="cursor: pointer; user-select: none;">Monthly</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
-  </label>
 
-  <label>
-    Monthly PMI:
-    <div class="dollar" style="position: relative;">
-      <input type="text" id="pmi" placeholder="100" class="comma-input" inputmode="decimal">
-    </div>
-  </label>
-
-  <label>
-    Monthly Home Insurance:
-    <div class="dollar" style="position: relative;">
-      <input type="text" id="insurance" placeholder="120" class="comma-input" inputmode="decimal">
-    </div>
-  </label>
-
-  <div class="button-row">
-    <button id="calculateBtn">Calculate</button>
-    <button id="saveBtn">Save Scenario</button>
-    <button id="clearBtn">Clear</button>
   </div>
-
-  <div id="result">Monthly Payment: $0</div>
-  </div>
-
-  <h3>Saved Scenarios</h3>
-  <table id="scenarioTable">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th data-col="label" style="cursor: pointer; user-select: none;">Label</th>
-        <th data-col="price" style="cursor: pointer; user-select: none;">Price</th>
-        <th data-col="down" style="cursor: pointer; user-select: none;">Down</th>
-        <th data-col="rate" style="cursor: pointer; user-select: none;">Rate %</th>
-        <th data-col="term" style="cursor: pointer; user-select: none;">Term</th>
-        <th data-col="taxes" style="cursor: pointer; user-select: none;">Taxes</th>
-        <th data-col="pmi" style="cursor: pointer; user-select: none;">PMI</th>
-        <th data-col="insurance" style="cursor: pointer; user-select: none;">Insurance</th>
-        <th data-col="monthly" style="cursor: pointer; user-select: none;">Monthly</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
 
   <script src="index.js"></script>
 </body>

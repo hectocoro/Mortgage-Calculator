@@ -129,19 +129,20 @@ function renderScenarios() {
     scenarios.forEach((s, i) => {
         const row = document.createElement("tr");
 
+        // create cells with data-label attributes for responsive card layout on small screens
         row.innerHTML = `
-        <td>${i + 1}</td>
-        <td>${s.label}</td>
-    <td>${formatCurrency(s.price)}</td>
-    <td>${formatDownDisplay(s.price, s.down)}</td>
-        <td>${s.rate}%</td>
-        <td>${s.term} yrs</td>
-        <td>${formatCurrency(s.taxes)}</td>
-        <td>${formatCurrency(s.pmi)}</td>
-        <td>${formatCurrency(s.insurance)}</td>
-        <td><b>${formatCurrency(s.monthly)}</b></td>
-        <td></td>
-        `;
+    <td data-label="#">${i + 1}</td>
+    <td data-label="Label">${s.label}</td>
+    <td data-label="Price">${formatCurrency(s.price)}</td>
+    <td data-label="Down">${formatDownDisplay(s.price, s.down)}</td>
+    <td data-label="Rate">${s.rate}%</td>
+    <td data-label="Term">${s.term} yrs</td>
+    <td data-label="Taxes">${formatCurrency(s.taxes)}</td>
+    <td data-label="PMI">${formatCurrency(s.pmi)}</td>
+    <td data-label="Insurance">${formatCurrency(s.insurance)}</td>
+    <td data-label="Monthly"><b>${formatCurrency(s.monthly)}</b></td>
+    <td data-label="Action"></td>
+    `;
 
         // Delete button
         const delBtn = document.createElement("button");
@@ -378,9 +379,9 @@ function onPriceChange() {
     const downPercent = getNumericValue(downPercentInput);
     const down = getNumericValue(downInput);
 
-    if(downPercent !== 0) {
+    if (downPercent !== 0) {
         updateDownValue();
-    } else if(down !== 0) {
+    } else if (down !== 0) {
         updateDownPercent();
     }
 }
