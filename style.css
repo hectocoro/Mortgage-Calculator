@@ -57,6 +57,20 @@ input {
   border-radius: 6px;
 }
 
+.term-button {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.term-button.selected {
+  background: #0078d4;
+  color: white;
+  border-color: #0064b0;
+}
+
 input[type='number'] {
   -moz-appearance: textfield;
   -webkit-appearance: textfield;

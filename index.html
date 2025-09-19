@@ -46,7 +46,10 @@
 
       <label>
         Term (years):
-        <input type="text" id="term" placeholder="30" class="comma-input" inputmode="decimal">
+        <div class="term-options" style="display:flex; gap:8px; align-items:center;">
+          <button type="button" id="term15" class="term-button" data-term="15">15</button>
+          <button type="button" id="term30" class="term-button selected" data-term="30">30</button>
+        </div>
       </label>
 
       <label>

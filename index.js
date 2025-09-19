@@ -72,7 +72,7 @@ function calculateScenario() {
         price: getNumericValue(document.getElementById('price')),
         down: getNumericValue(document.getElementById('down')),
         rate: getNumericValue(document.getElementById('rate')),
-        term: getNumericValue(document.getElementById('term')),
+    term: getSelectedTerm(),
         taxes: getNumericValue(document.getElementById('taxes')),
         pmi: getNumericValue(document.getElementById('pmi')),
         insurance: getNumericValue(document.getElementById('insurance')),
@@ -103,13 +103,16 @@ function clearForm() {
     document.getElementById('price').value = '';
     document.getElementById('down').value = '';
     document.getElementById('rate').value = '';
-    document.getElementById('term').value = '';
+    // document.getElementById('term').value = '';
     document.getElementById('taxes').value = '';
     document.getElementById('pmi').value = '';
     document.getElementById('insurance').value = '';
 
     // Reset result
     document.getElementById('result').textContent = "Monthly Payment: $0";
+
+    // reset term buttons to default 30
+    setSelectedTerm(30);
 
     // move focus to first field
     document.getElementById('label').focus();
@@ -266,7 +269,8 @@ function populateFormFromScenario(scenario, focusField = null) {
     document.getElementById('price').value = formatWithCommas(String(scenario.price || ''));
     document.getElementById('down').value = formatWithCommas(String(scenario.down || ''));
     document.getElementById('rate').value = scenario.rate != null ? String(scenario.rate) : '';
-    document.getElementById('term').value = formatWithCommas(String(scenario.term || ''));
+    // set term buttons
+    setSelectedTerm(Number(scenario.term || 30));
     document.getElementById('taxes').value = formatWithCommas(String(scenario.taxes || ''));
     document.getElementById('pmi').value = formatWithCommas(String(scenario.pmi || ''));
     document.getElementById('insurance').value = formatWithCommas(String(scenario.insurance || ''));
@@ -301,6 +305,12 @@ function populateSingleFieldFromScenario(scenario, field) {
         insurance: formatWithCommas(String(scenario.insurance || '')),
         monthly: formatCurrency(scenario.monthly)
     };
+
+    // special-case the term field since it's now buttons not an input
+    if (field === 'term') {
+        setSelectedTerm(Number(scenario.term || 30));
+        return;
+    }
 
     const el = document.getElementById(field);
     if (el && valMap.hasOwnProperty(field)) {
@@ -390,6 +400,29 @@ function onPriceChange() {
 downInput.addEventListener("keyup", updateDownPercent);
 downPercentInput.addEventListener("keyup", updateDownValue);
 priceInput.addEventListener("keyup", onPriceChange);
+
+// TERM selection helpers
+function getSelectedTerm() {
+    const sel = document.querySelector('.term-button.selected');
+    return sel ? Number(sel.getAttribute('data-term')) : 30;
+}
+
+function setSelectedTerm(n) {
+    document.querySelectorAll('.term-button').forEach(b => {
+        b.classList.toggle('selected', Number(b.getAttribute('data-term')) === Number(n));
+    });
+}
+
+// Wire term buttons
+document.querySelectorAll('.term-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const term = Number(btn.getAttribute('data-term')) || 30;
+        setSelectedTerm(term);
+        // user changed term -> clear calculated result and disable save
+        document.getElementById('result').textContent = "Monthly Payment: $0";
+        document.getElementById('saveBtn').disabled = true;
+    });
+});
 
 // Initialize sortable headers in case script is loaded after DOM
 ensureSortableHeaders();
