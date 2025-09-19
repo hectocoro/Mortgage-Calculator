@@ -81,6 +81,17 @@ th {
   padding-left: 20px;
 }
 
+/* Responsive: Make form bigger and wider on mobile */
+@media (max-width: 600px) {
+  #form {
+    width: 95% !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+    padding: 16px !important;
+    font-size: 1.1em;
+  }
+}
+
 .percent::after {
   content: "%";
   position: absolute;
